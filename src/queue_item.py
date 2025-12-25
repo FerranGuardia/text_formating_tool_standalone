@@ -2,7 +2,7 @@ import os #this is a python module that will allow me to interact with the os.
 
 class QueueItem:
 
-    def _init__(self, file_path, output_folder):
+    def __init__(self, file_path, output_folder):
 
         #---Validation ---
 
@@ -18,4 +18,4 @@ class QueueItem:
         self.output_folder = output_folder #this is where the file will be placed
         self.status = "Pending" #this is the default status when you add an item to the queue
         self.progress = 0 #this is to show the progress until completion
-        
+
