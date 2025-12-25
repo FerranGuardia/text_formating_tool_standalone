@@ -1,0 +1,26 @@
+{
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.diagnosticMode": "workspace",
+    "python.languageServer": "Pylance",
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}"
+    ],
+    "git.autoRepositoryDetection": "openEditors",
+    "git.scanRepositories": [
+        "${workspaceFolder}"
+    ],
+    "git.enabled": true,
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/venv/**": true,
+        "**/.venv/**": true
+    },
+    "search.exclude": {
+        "**/venv": true,
+        "**/.venv": true,
+        "**/node_modules": true
+    }
+}
+
