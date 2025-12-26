@@ -2,6 +2,16 @@ import os
 import pytest
 from src.queue_item import QueueItem
 
+@pytest.fixture
+def valid_paths(tmp_path):
+    input_file = tmp_path / "input.txt"
+    input_file.write_text("hello")
+
+    output_folder = tmp_path / "out"
+    output_folder.mkdir()
+
+    return str(input_file), str(output_folder)
+
 # --- Test for behaviour of the class. ---
 
 def test_queue_item_missing_file(tmp_path):
@@ -11,14 +21,12 @@ def test_queue_item_missing_file(tmp_path):
     with pytest.raises(FileNotFoundError):
         QueueItem("does_not_exist.txt", str(output))
 
-
 def test_queue_item_missing_output_folder(tmp_path):
     file = tmp_path / "example.txt"
     file.write_text("hello")
 
     with pytest.raises(NotADirectoryError):
         QueueItem(str(file), "missing_folder")
-
 
 def test_queue_item_valid(tmp_path):
     file = tmp_path / "example.txt"
@@ -35,31 +43,20 @@ def test_queue_item_valid(tmp_path):
     assert item.status == "Pending"
     assert item.progress == 0
 
-
 # --- Test for method start ---
 
-def test_start_queue_status_to_processing(tmp_path):
-    input_file = tmp_path / "input.txt"
-    input_file.write_text("hello")
-
-    output_folder = tmp_path / "out"
-    output_folder.mkdir()
-
-    item = QueueItem(str(input_file), str(output_folder))
+def test_start_queue_status_to_processing(valid_paths):
+    file_path, output_folder = valid_paths
+    item = QueueItem(file_path, output_folder)
 
     item.start()
     assert item.status == "Processing"
 
+def test_start_queue_status_not_pending(valid_paths):
+    file_path, output_folder = valid_paths
+    item = QueueItem(file_path, output_folder)
 
-def test_start_queue_status_not_pending(tmp_path):
-    input_file = tmp_path / "input.txt"
-    input_file.write_text("hello")
-
-    output_folder = tmp_path / "out"
-    output_folder.mkdir()
-
-    item = QueueItem(str(input_file), str(output_folder))
-    item.status = ""
+    item.status = ""  # invalid state
 
     with pytest.raises(RuntimeError):
         item.start()
