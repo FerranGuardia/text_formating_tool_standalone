@@ -10,7 +10,7 @@ class Queue:
 
 #---Methods---
 
-def add_item(self, input_folder: str, output_folder: str):
+ def add_item(self, input_folder: str, output_folder: str):
     item = QueueItem(input_folder, output_folder)
     self.items.append(item)
     return item
