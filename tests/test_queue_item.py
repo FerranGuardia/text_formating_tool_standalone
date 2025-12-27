@@ -60,3 +60,41 @@ def test_start_queue_status_not_pending(valid_paths):
 
     with pytest.raises(RuntimeError):
         item.start()
+
+# --- Test for method pause ---
+
+def test_pausing_from_processing(valid_paths):
+    file_path, output_folder = valid_paths
+    item = QueueItem(file_path, output_folder)
+    item.status = "Processing"
+    item.pause()
+    assert item.status == "Paused"
+
+def test_pausing_from_anything(valid_paths):
+     file_path, output_folder = valid_paths
+     item = QueueItem(file_path, output_folder)
+     item.status = ""
+    
+     with pytest.raises(RuntimeError):
+      item.pause()
+
+def test_pausing_from_paused(valid_paths):
+    file_path, output_folder = valid_paths
+    item = QueueItem(file_path, output_folder)
+    item.status = "Paused"
+    with pytest.raises(RuntimeError):
+        item.pause()
+
+def test_pausing_from_pending(valid_paths):
+    file_path, output_folder = valid_paths
+    item = QueueItem(file_path, output_folder)
+    item.status = "Pending"
+    with pytest.raises(RuntimeError):
+        item.pause()
+
+def test_pausing_from_completed(valid_paths):
+    file_path, output_folder = valid_paths
+    item = QueueItem(file_path, output_folder)
+    item.status = "Completed"
+    with pytest.raises(RuntimeError):
+        item.pause()    
