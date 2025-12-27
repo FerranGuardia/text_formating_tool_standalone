@@ -5,13 +5,13 @@ from src.queue_item import QueueItem
 
 @pytest.fixture
 def valid_paths(tmp_path):
-    input_file = tmp_path / "input.txt"
-    input_file.write_text("hello")
+    input_folder = tmp_path / "input"
+    input_folder.mkdir()
 
     output_folder = tmp_path / "out"
     output_folder.mkdir()
 
-    return str(input_file), str(output_folder)
+    return str(input_folder), str(output_folder)
 
 # --- Test for behaviour of the class. ---
 
@@ -21,31 +21,30 @@ def test_queue_item_missing_file(tmp_path):
     output = tmp_path / "out"
     output.mkdir()
 
-    with pytest.raises(FileNotFoundError):
-        QueueItem("does_not_exist.txt", str(output))
+    with pytest.raises(NotADirectoryError):
+        QueueItem("does_not_exist", str(output))
 
 
 def test_queue_item_missing_output_folder(tmp_path):
 
-    file = tmp_path / "example.txt"
-    file.write_text("hello")
+    input_folder = tmp_path / "input"
+    input_folder.mkdir()
 
     with pytest.raises(NotADirectoryError):
-        QueueItem(str(file), "missing_folder")
+        QueueItem(str(input_folder), "missing_folder")
 
 
 def test_queue_item_valid(tmp_path):
 
-    file = tmp_path / "example.txt"
-    file.write_text("hello")
+    input_folder = tmp_path / "input"
+    input_folder.mkdir()
 
     output = tmp_path / "out"
     output.mkdir()
 
-    item = QueueItem(str(file), str(output))
+    item = QueueItem(str(input_folder), str(output))
 
-    assert item.file_name == "example.txt"
-    assert item.file_path == str(file)
+    assert item.input_folder == str(input_folder)
     assert item.output_folder == str(output)
     assert item.status == "Pending"
     assert item.progress == 0
@@ -55,8 +54,8 @@ def test_queue_item_valid(tmp_path):
 
 def test_start_queue_status_to_processing(valid_paths):
 
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
 
     item.start()
     assert item.status == "Processing"
@@ -64,8 +63,8 @@ def test_start_queue_status_to_processing(valid_paths):
 
 def test_start_queue_status_not_pending(valid_paths):
 
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
 
     item.status = ""  # invalid state
 
@@ -77,8 +76,8 @@ def test_start_queue_status_not_pending(valid_paths):
 
 def test_pausing_from_processing(valid_paths):
 
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
     item.status = "Processing"
 
     item.pause()
@@ -87,8 +86,8 @@ def test_pausing_from_processing(valid_paths):
 
 def test_pausing_from_any(valid_paths):
      
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
     item.status = ""
     
     with pytest.raises(RuntimeError):
@@ -97,8 +96,8 @@ def test_pausing_from_any(valid_paths):
 
 def test_pausing_from_paused(valid_paths):
 
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
     item.status = "Paused"
 
     with pytest.raises(RuntimeError):
@@ -107,8 +106,8 @@ def test_pausing_from_paused(valid_paths):
 
 def test_pausing_from_pending(valid_paths):
 
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
     item.status = "Pending"
 
     with pytest.raises(RuntimeError):
@@ -117,8 +116,8 @@ def test_pausing_from_pending(valid_paths):
 
 def test_pausing_from_completed(valid_paths):
 
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
     item.status = "Completed"
 
     with pytest.raises(RuntimeError):
@@ -128,8 +127,8 @@ def test_pausing_from_completed(valid_paths):
 
 def test_resuming_from_paused(valid_paths):
 
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
     item.status = "Paused"
 
     item.resume()
@@ -137,8 +136,8 @@ def test_resuming_from_paused(valid_paths):
 
 def test_resuming_from_any(valid_paths):
 
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
     item.status = ""
 
     with pytest.raises(RuntimeError):
@@ -146,8 +145,8 @@ def test_resuming_from_any(valid_paths):
 
 def test_resuming_from_completed(valid_paths):
 
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
     item.status = "Completed"
 
     with pytest.raises(RuntimeError):
@@ -155,8 +154,8 @@ def test_resuming_from_completed(valid_paths):
 
 def test_resuming_from_pending(valid_paths):
 
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
     item.status = "Pending"
 
     with pytest.raises(RuntimeError):
@@ -164,8 +163,8 @@ def test_resuming_from_pending(valid_paths):
 
 def test_resuming_from_processing(valid_paths):
 
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
     item.status = "Processing"
 
     with pytest.raises(RuntimeError):
@@ -175,8 +174,8 @@ def test_resuming_from_processing(valid_paths):
 
 def test_completing_from_processing(valid_paths):
 
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
     item.status = "Processing"
 
     item.complete()
@@ -184,8 +183,8 @@ def test_completing_from_processing(valid_paths):
 
 def test_completing_from_any(valid_paths):
 
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
     item.status = ""
 
     with pytest.raises(RuntimeError):
@@ -193,8 +192,8 @@ def test_completing_from_any(valid_paths):
 
 def test_completing_from_pending(valid_paths):
 
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
     item.status = "Pending"
 
     with pytest.raises(RuntimeError):
@@ -202,8 +201,8 @@ def test_completing_from_pending(valid_paths):
 
 def test_completing_from_paused(valid_paths):
 
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
     item.status = "Paused"
 
     with pytest.raises(RuntimeError):
@@ -211,8 +210,8 @@ def test_completing_from_paused(valid_paths):
 
 def test_completing_from_complete(valid_paths):
 
-    file_path, output_folder = valid_paths
-    item = QueueItem(file_path, output_folder)
+    input_folder, output_folder = valid_paths
+    item = QueueItem(input_folder, output_folder)
     item.status = "Completed"
 
     with pytest.raises(RuntimeError):
