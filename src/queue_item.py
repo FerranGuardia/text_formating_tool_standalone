@@ -33,4 +33,9 @@ class QueueItem:
         if self.status not in ("Processing",):
             raise RuntimeError("Cannot pause an item that is not processing")
         self.status = "Paused"
-        
+
+    def resume(self):
+        """Resume the item only if paused"""
+        if self.status not in ("Paused",):
+            raise RuntimeError("Cannot resume this item")
+        self.status = "Processing"
