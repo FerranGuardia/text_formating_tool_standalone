@@ -1,8 +1,17 @@
 {
     "python.analysis.typeCheckingMode": "basic",
-    "python.analysis.autoImportCompletions": true,
+    "python.analysis.autoImportCompletions": false,
     "python.analysis.diagnosticMode": "workspace",
     "python.languageServer": "Pylance",
+    "python.analysis.completeFunctionParens": false,
+    "editor.quickSuggestions": {
+        "other": false,
+        "comments": false,
+        "strings": false
+    },
+    "editor.suggestOnTriggerCharacters": false,
+    "editor.wordBasedSuggestions": false,
+    "editor.parameterHints.enabled": false,
     "python.analysis.extraPaths": [
         "${workspaceFolder}"
     ],
