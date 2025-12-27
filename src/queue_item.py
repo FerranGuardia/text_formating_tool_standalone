@@ -1,47 +1,38 @@
-import os #this is a python module that will allow me to interact with the os.
+import os
 
 class QueueItem:
 
-    def __init__(self, file_path: str, output_folder: str):
-    # Constructor
+    def __init__(self, input_folder: str, output_folder: str):
+        # --- Validation ---
+        if not os.path.isdir(input_folder):
+            raise NotADirectoryError(f"Input folder does not exist: {input_folder}")
 
-        #---Validation ---
-
-        if not os.path.isfile(file_path):
-            raise FileNotFoundError(f"Input file does not exist: {file_path}") #this checks if the input file exist. If it doesn't raises an error
-        
         if not os.path.isdir(output_folder):
-            raise NotADirectoryError(f"Output folder does not exist: {output_folder}") #this checks if the output folder exist. If it doesn't raises an error
+            raise NotADirectoryError(f"Output folder does not exist: {output_folder}")
 
-        #---Initialization--- 
+        # --- Initialization ---
+        self.input_folder: str = input_folder
+        self.output_folder: str = output_folder
+        self.status: str = "Pending"
+        self.progress: int = 0
 
-        self.file_path: str = file_path  #this is the location of the file
-        self.file_name: str = os.path.basename(file_path) #this line extracts a full path and figures out the file name
-        self.output_folder: str = output_folder #this is where the file will be placed
-        self.status: str = "Pending" #this is the default status when you add an item to the queue
-        self.progress: int = 0 #this is to show the progress until completion
-
-    #  --- Methods ---
-    def start(self): # start whatever item is pending to begin the queue
-        """Mark the item as processing."""
-        if self.status not in ("Pending", "Paused"): #This is to check if an item is pending
+    # --- Methods ---
+    def start(self):
+        if self.status not in ("Pending", "Paused"):
             raise RuntimeError("Cannot start an item that is not pending.")
         self.status = "Processing"
 
     def pause(self):
-        """Pause the item only if processing"""
-        if self.status not in ("Processing",):
+        if self.status != "Processing":
             raise RuntimeError("Cannot pause an item that is not processing")
         self.status = "Paused"
 
     def resume(self):
-        """Resume the item only if paused"""
-        if self.status not in ("Paused",):
+        if self.status != "Paused":
             raise RuntimeError("Cannot resume this item")
         self.status = "Processing"
-    
+
     def complete(self):
-        """Complete the item after is done processing"""
-        if self.status not in ("Processing",):
+        if self.status != "Processing":
             raise RuntimeError("Cannot complete this item")
         self.status = "Completed"
