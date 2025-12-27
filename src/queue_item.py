@@ -42,6 +42,6 @@ class QueueItem:
     
     def complete(self):
         """Complete the item after is done processing"""
-        if self.status not in ("Processing"):
+        if self.status not in ("Processing",):
             raise RuntimeError("Cannot complete this item")
         self.status = "Completed"
