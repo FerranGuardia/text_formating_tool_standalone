@@ -170,3 +170,50 @@ def test_resuming_from_processing(valid_paths):
 
     with pytest.raises(RuntimeError):
         item.resume()
+
+# --- Tests for method complete --- 
+
+def test_completing_from_processing(valid_paths):
+
+    file_path, output_folder = valid_paths
+    item = QueueItem(file_path, output_folder)
+    item.status = "Processing"
+
+    item.complete()
+    assert item.status == "Completed"
+
+def test_completing_from_any(valid_paths):
+
+    file_path, output_folder = valid_paths
+    item = QueueItem(file_path, output_folder)
+    item.status = ""
+
+    with pytest.raises(RuntimeError):
+        item.complete()
+
+def test_completing_from_pending(valid_paths):
+
+    file_path, output_folder = valid_paths
+    item = QueueItem(file_path, output_folder)
+    item.status = "Pending"
+
+    with pytest.raises(RuntimeError):
+        item.complete()
+
+def test_completing_from_paused(valid_paths):
+
+    file_path, output_folder = valid_paths
+    item = QueueItem(file_path, output_folder)
+    item.status = "Paused"
+
+    with pytest.raises(RuntimeError):
+        item.complete()
+
+def test_completing_from_complete(valid_paths):
+
+    file_path, output_folder = valid_paths
+    item = QueueItem(file_path, output_folder)
+    item.status = "Completed"
+
+    with pytest.raises(RuntimeError):
+        item.complete()
