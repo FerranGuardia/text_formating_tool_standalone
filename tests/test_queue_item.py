@@ -125,3 +125,21 @@ def test_pausing_from_completed(valid_paths):
         item.pause()
 
 # --- Test for method resume --- 
+
+def test_resuming_from_paused(valid_paths):
+
+    file_path, output_folder = valid_paths
+    item = QueueItem(file_path, output_folder)
+    item.status = "Paused"
+
+    item.resume()
+    assert item.status == "Processing"
+
+def test_resuming_from_any(valid_paths):
+
+    file_path, output_folder = valid_paths
+    item = QueueItem(file_path, output_folder)
+    item.status = ""
+
+    with pytest.raises(RuntimeError):
+        item.resume()
