@@ -21,7 +21,7 @@ class QueueItem:
         self.status: str = "Pending" #this is the default status when you add an item to the queue
         self.progress: int = 0 #this is to show the progress until completion
 
-    #  --- Method ---
+    #  --- Methods ---
     def start(self): # start whatever item is pending to begin the queue
         """Mark the item as processing."""
         if self.status not in ("Pending", "Paused"): #This is to check if an item is pending
@@ -39,3 +39,9 @@ class QueueItem:
         if self.status not in ("Paused",):
             raise RuntimeError("Cannot resume this item")
         self.status = "Processing"
+    
+    def complete(self):
+        """Complete the item after is done processing"""
+        if self.status not in ("Processing"):
+            raise RuntimeError("Cannot complete this item")
+        self.status = "Completed"
