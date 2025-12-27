@@ -27,4 +27,10 @@ class QueueItem:
         if self.status not in ("Pending", "Paused"): #This is to check if an item is pending
             raise RuntimeError("Cannot start an item that is not pending.")
         self.status = "Processing"
+
+    def pause(self):
+        """Pause the item only if processing"""
+        if self.status not in ("Processing",):
+            raise RuntimeError("Cannot pause an item that is not processing")
+        self.status = "Paused"
         
