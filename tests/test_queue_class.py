@@ -115,3 +115,15 @@ def test_remove_item_after_current_no_change(queue_with_three_items):
     assert removed is item3
     assert queue.current_index == 0   
     assert queue.items[0] is item1
+
+def test_remove_item_when_current_index_is_none(folders):
+
+    input_folder, output_folder = folders
+    queue = Queue()
+    item1 = queue.add_item(input_folder, output_folder)
+    item2 = queue.add_item(input_folder, output_folder)
+    
+    removed = queue.remove_item(0)
+
+    assert queue.items[0] is item2
+    assert len(queue.items) == 1
