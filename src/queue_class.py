@@ -13,7 +13,7 @@ class Queue:
         return None
     return self.items[self.current_index]
   
-#---Methods---
+  #---Methods---
 
   def add_item(self, input_folder: str, output_folder: str):
     item = QueueItem(input_folder, output_folder)
