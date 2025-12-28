@@ -104,3 +104,14 @@ def test_remove_item_before_current_decrements_current_index(queue_with_three_it
     assert removed is item1
     assert queue.current_index == 1   
     assert queue.items[1] is item3
+
+def test_remove_item_after_current_no_change(queue_with_three_items):
+
+    queue, item1, item2, item3 = queue_with_three_items
+
+    queue.current_index = 0  
+    removed = queue.remove_item(2)
+
+    assert removed is item3
+    assert queue.current_index == 0   
+    assert queue.items[0] is item1
