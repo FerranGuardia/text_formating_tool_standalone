@@ -22,7 +22,8 @@ def test_queue_state():
     assert queue.current_index is None
 
 #---Method---
-
+        
+# --- Start Item ---
 def test_add_item_adds_queueitem(folders):
 
     input_folder, output_folder = folders
@@ -51,6 +52,29 @@ def test_order_items_added(folders):
     assert queue.items[1] is item2
     assert queue.items[2] is item3
 
+#---Remove Item---
 
-    
+#---validation---
+def test_remove_item_negative_index(folders):
+    input_folder, output_folder = folders
+    queue = Queue()
+    queue.add_item(input_folder, output_folder)
+
+    with pytest.raises(IndexError):
+        queue.remove_item(-1)
+
+def test_remove_item_index_to_large(folders):
+    input_folder, output_folder = folders
+    queue = Queue()
+    queue.add_item(input_folder, output_folder)
+
+    with pytest.raises(IndexError):
+        queue.remove_item(1)
+
+def test_remove_item_empty_queue():
+    queue = Queue()
+
+    with pytest.raises(IndexError):
+        queue.remove_item(0)
+
 
