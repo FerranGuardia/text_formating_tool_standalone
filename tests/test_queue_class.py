@@ -23,6 +23,7 @@ def test_queue_state():
 
 #---Method---
 
+
 def test_add_item_adds_queueitem(folders):
 
     input_folder, output_folder = folders
@@ -33,5 +34,7 @@ def test_add_item_adds_queueitem(folders):
     assert isinstance(item, QueueItem)
     assert queue.items[0] is item
 
-
+def test_is_current_item_in_queue_none():
+    queue = Queue()
+    assert queue.current_item is None
 
