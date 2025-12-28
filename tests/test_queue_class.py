@@ -38,8 +38,9 @@ def test_is_current_item_in_queue_none():
     queue = Queue()
     assert queue.current_item is None
 
-def test_order_items_added():
+def test_order_items_added(folders):
 
+    input_folder, output_folder = folders
     queue = Queue()
     item1 = queue.add_item(input_folder, output_folder)
     item2 = queue.add_item(input_folder, output_folder)
