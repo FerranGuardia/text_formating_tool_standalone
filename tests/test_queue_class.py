@@ -167,4 +167,23 @@ def test_removing_first_item_when_it_is_current_item(folders):
     assert queue.current_index is None
     assert queue.items[0] is item2
     assert removed is item
-    assert len(queue.items) == 1   
+    assert len(queue.items) == 1
+
+def test_remove_item_in_sequence_current_index_middle(queue_with_three_items):
+
+    queue, item1, item2, item3 = queue_with_three_items
+
+    queue.current_index = 1  
+    removed1 = queue.remove_item(0)
+
+    assert removed1 is item1
+    assert queue.current_index == 0
+    assert len(queue.items) == 2
+    assert queue.items[0] is item2
+
+    removed2 = queue.remove_item(1)
+
+    assert removed2 is item3
+    assert queue.current_index == 0
+    assert len(queue.items) == 1
+    assert queue.items[0] is item2
