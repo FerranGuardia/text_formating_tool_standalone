@@ -211,5 +211,5 @@ def test_remove_all_items_in_sequence_current_index_last(queue_with_three_items)
     assert queue.current_index is None
     assert len(queue.items) == 0
 
-def test_remove_last_item_when_is_current_index(queue_with_three_items):
+
 
