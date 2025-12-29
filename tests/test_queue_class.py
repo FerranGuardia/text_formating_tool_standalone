@@ -187,3 +187,29 @@ def test_remove_item_in_sequence_current_index_middle(queue_with_three_items):
     assert queue.current_index == 0
     assert len(queue.items) == 1
     assert queue.items[0] is item2
+
+def test_remove_all_items_in_sequence_current_index_last(queue_with_three_items):
+
+    queue, item1, item2, item3 = queue_with_three_items
+
+    queue.current_index = 2  
+    removed1 = queue.remove_item(0)
+
+    assert removed1 is item1
+    assert queue.current_index == 1
+    assert len(queue.items) == 2
+    
+    removed2 = queue.remove_item(0)
+
+    assert removed2 is item2
+    assert queue.current_index == 0
+    assert len(queue.items) == 1
+
+    removed3 = queue.remove_item(0)
+
+    assert removed3 is item3
+    assert queue.current_index is None
+    assert len(queue.items) == 0
+
+def test_remove_last_item_when_is_current_index(queue_with_three_items):
+
