@@ -130,6 +130,7 @@ def test_remove_item_when_current_index_is_none(folders):
 
 # Functionality test
 def test_remove_item_return_removed_item(folders):
+
     input_folder, output_folder = folders
     queue = Queue()
     item = queue.add_item(input_folder, output_folder)
@@ -139,4 +140,14 @@ def test_remove_item_return_removed_item(folders):
     assert removed is item
     assert len(queue.items) == 0
 
-    
+def test_remove_item_removes_from_list(folders):
+
+    input_folder, output_folder = folders
+    queue = Queue()
+    item = queue.add_item(input_folder, output_folder)
+    item2 = queue.add_item(input_folder, output_folder)
+
+    queue.remove_item(0)
+
+    assert len(queue.items) == 1
+    assert queue.items[0] is item2   
