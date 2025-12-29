@@ -150,4 +150,21 @@ def test_remove_item_removes_from_list(folders):
     queue.remove_item(0)
 
     assert len(queue.items) == 1
-    assert queue.items[0] is item2   
+    assert queue.items[0] is item2
+
+# Edge cases
+
+def test_removing_first_item_when_it_is_current_item(folders):
+    
+    input_folder, output_folder = folders
+    queue = Queue()
+    item = queue.add_item(input_folder, output_folder)
+    item2 = queue.add_item(input_folder, output_folder)
+
+    queue.current_index = 0
+    removed = queue.remove_item(0)
+
+    assert queue.current_index is None
+    assert queue.items[0] is item2
+    assert removed is item
+    assert len(queue.items) == 1   
